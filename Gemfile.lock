@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rails_error_notifier (0.1.2)
+    rails_error_notifier (0.1.3)
 
 GEM
   remote: https://rubygems.org/
