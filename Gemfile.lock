@@ -67,6 +67,8 @@ GEM
     minitest (5.25.5)
     nokogiri (1.18.9-x86_64-darwin)
       racc (~> 1.4)
+    nokogiri (1.18.9-x86_64-linux-gnu)
+      racc (~> 1.4)
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
@@ -140,6 +142,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   irb
