@@ -111,3 +111,4 @@ RSpec.describe RailsErrorNotifier::Notifier do
     end
   end
 end
+

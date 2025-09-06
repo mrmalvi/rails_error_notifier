@@ -48,10 +48,19 @@ GEM
       rexml
     crass (1.0.6)
     date (3.4.1)
+    debug (1.11.0)
+      irb (~> 1.10)
+      reline (>= 0.3.8)
     diff-lcs (1.6.2)
     drb (2.2.3)
     erb (5.0.2)
     erubi (1.13.1)
+    faraday (2.13.4)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
+    faraday-net_http (3.4.1)
+      net-http (>= 0.5.0)
     generator_spec (0.10.0)
       activesupport (>= 3.0.0)
       railties (>= 3.0.0)
@@ -63,11 +72,16 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
+    json (2.13.2)
+    jwt (2.10.2)
+      base64
     logger (1.7.0)
     loofah (2.24.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     minitest (5.25.5)
+    net-http (0.6.0)
+      uri
     nokogiri (1.18.9-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.18.9-x86_64-linux-gnu)
@@ -134,8 +148,13 @@ GEM
     securerandom (0.4.1)
     stringio (3.1.7)
     thor (1.4.0)
+    twilio-ruby (7.8.0)
+      faraday (>= 0.9, < 3.0)
+      jwt (>= 1.5, < 3.0)
+      nokogiri (>= 1.6, < 2.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    uri (1.0.3)
     useragent (0.16.11)
     webmock (3.25.1)
       addressable (>= 2.8.0)
@@ -148,6 +167,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  debug (>= 1.0.0)
   generator_spec
   irb
   minitest (~> 5.16)
@@ -155,6 +175,7 @@ DEPENDENCIES
   rake (~> 13.0)
   rspec
   rspec-rails
+  twilio-ruby
   webmock
 
 BUNDLED WITH

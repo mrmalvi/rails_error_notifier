@@ -17,6 +17,8 @@ require "rspec"
 require "webmock/rspec"
 require "rails_error_notifier"
 require "rails_error_notifier/railtie"
+require "debug"
+
 WebMock.disable_net_connect!(allow_localhost: true)
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

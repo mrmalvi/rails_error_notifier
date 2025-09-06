@@ -7,8 +7,10 @@ gemspec
 
 gem "irb"
 gem "rake", "~> 13.0"
+gem "twilio-ruby"
 
 group :test do
+  gem "debug", ">= 1.0.0"
   gem "rspec"
   gem "rspec-rails"
   gem "webmock"

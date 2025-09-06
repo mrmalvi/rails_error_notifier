@@ -1,5 +1,7 @@
 require "net/http"
 require "json"
+require "twilio-ruby"
+# require "time"
 
 module RailsErrorNotifier
   class Notifier
@@ -16,12 +18,19 @@ module RailsErrorNotifier
 
       payload = {
         error: exception.message,
-        backtrace: exception.backtrace,
-        context: context
+        backtrace: exception.backtrace || ["No backtrace"],
+        context: context || {}
       }
 
+      # Slack + Discord
       send_to_webhook(RailsErrorNotifier.configuration.slack_webhook, payload)
       send_to_webhook(RailsErrorNotifier.configuration.discord_webhook, payload)
+
+      # Email (Rails Mailer)
+      send_to_email(payload)
+
+      # WhatsApp (Twilio)
+      send_to_whatsapp(payload)
     end
 
     private
@@ -39,24 +48,16 @@ module RailsErrorNotifier
       else
         backtrace_text = truncate_for_discord((payload[:backtrace] || ["No backtrace"]).first(10).join("\n"))
         context_text   = truncate_for_discord(payload[:context].inspect)
-        data = {
-          name: "RailsErrorNotifier", # webhook display name
+        {
+          username: "RailsErrorNotifier",
           embeds: [
             {
               title: "🚨 Error Occurred",
               description: payload[:error],
               color: 0xFF0000,
               fields: [
-                {
-                  name: "Backtrace",
-                  value: "```\n#{backtrace_text}\n```",
-                  inline: false
-                },
-                {
-                  name: "Context",
-                  value: "```\n#{context_text}\n```",
-                  inline: false
-                }
+                { name: "Backtrace", value: "```\n#{backtrace_text}\n```", inline: false },
+                { name: "Context",   value: "```\n#{context_text}\n```",   inline: false }
               ],
               timestamp: Time.now.utc.iso8601
             }
@@ -65,6 +66,33 @@ module RailsErrorNotifier
       end
 
       Net::HTTP.post(uri, data.to_json, "Content-Type" => "application/json")
+    end
+
+    def send_to_email(payload)
+      return unless defined?(ErrorNotifierMailer)
+
+      ErrorNotifierMailer.error_notification(
+        error: payload[:error],
+        backtrace: payload[:backtrace],
+        context: payload[:context]
+      ).deliver_now
+    end
+
+    def send_to_whatsapp(payload)
+      cfg = RailsErrorNotifier.configuration
+      return unless cfg&.twilio_sid && cfg&.twilio_token
+
+      client = Twilio::REST::Client.new(cfg.twilio_sid, cfg.twilio_token)
+
+      message = "🚨 Error: #{payload[:error]}\n" \
+                "Backtrace: #{payload[:backtrace].first}\n" \
+                "Context: #{payload[:context].inspect}"
+
+      client.messages.create(
+        from: "whatsapp:#{cfg.twilio_from}",
+        to:   "whatsapp:#{cfg.twilio_to}",
+        body: message
+      )
     end
   end
 end
