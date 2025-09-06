@@ -13,4 +13,5 @@ group :test do
   gem "rspec-rails"
   gem "webmock"
   gem "minitest", "~> 5.16"
+  gem "generator_spec"
 end

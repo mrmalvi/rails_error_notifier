@@ -52,6 +52,9 @@ GEM
     drb (2.2.3)
     erb (5.0.2)
     erubi (1.13.1)
+    generator_spec (0.10.0)
+      activesupport (>= 3.0.0)
+      railties (>= 3.0.0)
     hashdiff (1.2.0)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
@@ -145,6 +148,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  generator_spec
   irb
   minitest (~> 5.16)
   rails_error_notifier!
