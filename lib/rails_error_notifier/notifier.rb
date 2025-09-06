@@ -27,9 +27,15 @@ module RailsErrorNotifier
 
     def send_to_webhook(url, payload)
       return unless url
-
       uri = URI(url)
-      Net::HTTP.post(uri, payload.to_json, "Content-Type" => "application/json")
+
+      data = if url.include?("hooks.slack.com")
+        { text: "#{payload[:error]}\n#{payload[:backtrace].join("\n")}" }
+      else
+        payload
+      end
+
+      Net::HTTP.post(uri, data.to_json, "Content-Type" => "application/json")
     end
   end
 end
