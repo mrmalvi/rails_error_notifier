@@ -37,7 +37,7 @@ module RailsErrorNotifier
       data = if url.include?("hooks.slack.com")
         { text: "#{payload[:error]}\n#{payload[:backtrace].join("\n")}" }
       else
-        backtrace_text = truncate_for_discord(payload[:backtrace].first(10).join("\n"))
+        backtrace_text = truncate_for_discord((payload[:backtrace] || ["No backtrace"]).first(10).join("\n"))
         context_text   = truncate_for_discord(payload[:context].inspect)
         data = {
           name: "RailsErrorNotifier", # webhook display name

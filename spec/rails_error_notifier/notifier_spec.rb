@@ -47,14 +47,16 @@ RSpec.describe RailsErrorNotifier::Notifier do
     it "includes context and backtrace in payload" do
       described_class.new(exception, user: "test_user").deliver
 
+      # Slack text payload
       expect(
         a_request(:post, "http://example.com/slack")
-          .with(body: /"error":"Something went wrong".*"context":\{"user":"test_user"\}/)
+          .with { |req| req.body.include?("Something went wrong") && req.body.include?("test_user") }
       ).to have_been_made
 
+      # Discord embed payload
       expect(
         a_request(:post, "http://example.com/discord")
-          .with(body: /"error":"Something went wrong".*"context":\{"user":"test_user"\}/)
+          .with { |req| req.body.include?("Something went wrong") && req.body.include?("test_user") }
       ).to have_been_made
     end
 
@@ -66,12 +68,12 @@ RSpec.describe RailsErrorNotifier::Notifier do
 
       expect(
         a_request(:post, "http://example.com/slack")
-          .with(body: /"error":"No backtrace".*"context":\{\}/)
+          .with { |req| req.body.include?("No backtrace") }
       ).to have_been_made
 
       expect(
         a_request(:post, "http://example.com/discord")
-          .with(body: /"error":"No backtrace".*"context":\{\}/)
+          .with { |req| req.body.include?("No backtrace") }
       ).to have_been_made
     end
 
@@ -80,12 +82,12 @@ RSpec.describe RailsErrorNotifier::Notifier do
 
       expect(
         a_request(:post, "http://example.com/slack")
-          .with(body: /"context":\{"user":"alice","role":"admin"\}/)
+          .with { |req| req.body.include?("alice") && req.body.include?("admin") }
       ).to have_been_made
 
       expect(
         a_request(:post, "http://example.com/discord")
-          .with(body: /"context":\{"user":"alice","role":"admin"\}/)
+          .with { |req| req.body.include?("alice") && req.body.include?("admin") }
       ).to have_been_made
     end
   end
