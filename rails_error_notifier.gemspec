@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors = ["mrmalvi"]
   spec.email = ["malviyak00@gmail.com"]
 
-  spec.summary = "Notify Rails errors to Slack and Discord"
+  spec.summary = "Notify Rails errors to Slack and Discord, Email, WhatsApp"
   spec.description = "A gem to send Rails exceptions to Slack and Discord"
   spec.homepage = "https://github.com/mrmalvi/rails_error_notifier"
   spec.license = "MIT"
