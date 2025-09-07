@@ -16,4 +16,5 @@ group :test do
   gem "webmock"
   gem "minitest", "~> 5.16"
   gem "generator_spec"
+  gem "actionmailer"
 end

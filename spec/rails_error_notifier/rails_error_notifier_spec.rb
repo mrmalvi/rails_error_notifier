@@ -1,4 +1,5 @@
 require "spec_helper"
+require "webmock/rspec"
 require "rails"
 require "rack/test"
 
@@ -8,16 +9,35 @@ RSpec.describe RailsErrorNotifier do
   let(:exception) { StandardError.new("Something went wrong") }
 
   before do
+    # Stub Slack & Discord
+    stub_request(:post, "http://example.com/slack").to_return(status: 200, body: "", headers: {})
+    stub_request(:post, "http://example.com/discord").to_return(status: 200, body: "", headers: {})
+
+    # Stub Twilio WhatsApp API
+    stub_request(:post, "https://api.twilio.com/2010-04-01/Accounts/sid123/Messages.json")
+      .with(
+        body: hash_including(
+          "Body" => a_string_including("Error"),
+          "From" => "whatsapp:+14150000000",
+          "To"   => "whatsapp:+919876543210"
+        ),
+        headers: {
+          "Authorization" => "Basic c2lkMTIzOnRva2VuMTIz", # sid123:token123 base64
+          "Content-Type"  => "application/x-www-form-urlencoded"
+        }
+      )
+      .to_return(status: 200, body: "", headers: {})
+
     RailsErrorNotifier.configure do |config|
       config.slack_webhook   = "http://example.com/slack"
       config.discord_webhook = "http://example.com/discord"
       config.enabled         = true
-    end
 
-    stub_request(:post, "http://example.com/slack")
-      .to_return(status: 200)
-    stub_request(:post, "http://example.com/discord")
-      .to_return(status: 200)
+      config.twilio_sid   = "sid123"
+      config.twilio_token = "token123"
+      config.twilio_from  = "+14150000000"
+      config.twilio_to    = "+919876543210"
+    end
   end
 
   describe RailsErrorNotifier::Configuration do
@@ -27,10 +47,17 @@ RSpec.describe RailsErrorNotifier do
   end
 
   describe RailsErrorNotifier::Notifier do
-    it "sends payload to Slack and Discord" do
-      described_class.new(exception, user: "tester").deliver
-      expect(a_request(:post, "http://example.com/slack")).to have_been_made
-      expect(a_request(:post, "http://example.com/discord")).to have_been_made
+    it "sends payload to Slack, Discord, and WhatsApp" do
+      expect {
+        described_class.new(exception, context: { user: "tester" }).deliver
+      }.not_to raise_error
+
+      expect(WebMock).to have_requested(:post, "http://example.com/slack").once
+      expect(WebMock).to have_requested(:post, "http://example.com/discord").once
+      expect(WebMock).to have_requested(
+        :post,
+        "https://api.twilio.com/2010-04-01/Accounts/sid123/Messages.json"
+      ).once
     end
 
     it "handles nil backtrace" do
@@ -60,8 +87,8 @@ RSpec.describe RailsErrorNotifier do
       failing_app = ->(_env) { raise exception }
       middleware = RailsErrorNotifier::Middleware.new(failing_app)
       expect { middleware.call("PATH_INFO" => "/fail") }.to raise_error(StandardError)
-      expect(a_request(:post, "http://example.com/slack")).to have_been_made
-      expect(a_request(:post, "http://example.com/discord")).to have_been_made
+      expect(WebMock).to have_requested(:post, "http://example.com/slack").once
+      expect(WebMock).to have_requested(:post, "http://example.com/discord").once
     end
   end
 

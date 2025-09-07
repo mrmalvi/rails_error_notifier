@@ -1,0 +1,24 @@
+<h2 style="color: #d32f2f; font-family: Arial, sans-serif;">🚨 Error Notification</h2>
+
+<div style="background: #fff3e0; border-left: 4px solid #ff9800; padding: 15px; margin: 10px 0;">
+  <h3 style="margin-top: 0; color: #e65100;">Error Details</h3>
+  <p style="font-family: monospace; background: #f5f5f5; padding: 10px; border-radius: 4px; word-break: break-all;">
+    <%= @error %>
+  </p>
+</div>
+
+<div style="margin: 20px 0;">
+  <h3 style="color: #1976d2;">Backtrace</h3>
+  <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #e9ecef; overflow-x: auto; font-size: 12px; line-height: 1.4;"><%= Array(@backtrace).join("\n") %></pre>
+</div>
+
+<% if @context.present? %>
+  <div style="margin: 20px 0;">
+    <h3 style="color: #388e3c;">Context Information</h3>
+    <pre style="background: #e8f5e8; padding: 15px; border-radius: 6px; border: 1px solid #c8e6c9; overflow-x: auto; font-size: 12px; line-height: 1.4;"><%= @context.inspect %></pre>
+  </div>
+<% end %>
+
+<div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 12px;">
+  <p>This error was automatically reported by RailsErrorNotifier at <%= Time.current.strftime("%Y-%m-%d %H:%M:%S UTC") %></p>
+</div>

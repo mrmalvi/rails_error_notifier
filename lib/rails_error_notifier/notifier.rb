@@ -66,16 +66,22 @@ module RailsErrorNotifier
       end
 
       Net::HTTP.post(uri, data.to_json, "Content-Type" => "application/json")
+    rescue => e
+      warn "[RailsErrorNotifier] Slack/Discord delivery failed: #{e.message}"
+      nil
     end
 
     def send_to_email(payload)
-      return unless defined?(ErrorNotifierMailer)
+      return unless defined?(RailsErrorNotifier::ErrorNotifierMailer)
 
-      ErrorNotifierMailer.error_notification(
+      RailsErrorNotifier::ErrorNotifierMailer.error_notification(
         error: payload[:error],
         backtrace: payload[:backtrace],
         context: payload[:context]
       ).deliver_now
+    rescue => e
+      warn "[RailsErrorNotifier] Email delivery failed: #{e.message}"
+      nil
     end
 
     def send_to_whatsapp(payload)
@@ -93,6 +99,9 @@ module RailsErrorNotifier
         to:   "whatsapp:#{cfg.twilio_to}",
         body: message
       )
+    rescue => e
+      warn "[RailsErrorNotifier] WhatsApp delivery failed: #{e.message}"
+      nil
     end
   end
 end

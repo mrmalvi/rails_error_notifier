@@ -1,0 +1,17 @@
+🚨 ERROR NOTIFICATION
+====================
+
+Error: <%= @error %>
+
+Backtrace:
+----------
+<%= Array(@backtrace).join("\n") %>
+
+<% if @context.present? %>
+Context:
+--------
+<%= @context.inspect %>
+<% end %>
+
+---
+This error was automatically reported by RailsErrorNotifier at <%= Time.current.strftime("%Y-%m-%d %H:%M:%S UTC") %>

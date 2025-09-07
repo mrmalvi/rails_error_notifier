@@ -1,5 +1,6 @@
 require "rails_error_notifier/configuration"
 require "rails_error_notifier/notifier"
+require "rails_error_notifier/error_notifier_mailer"
 require "rails_error_notifier/middleware"
 require "rails_error_notifier/railtie" if defined?(Rails::Railtie)
 
