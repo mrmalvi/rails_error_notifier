@@ -1,7 +1,10 @@
 require "net/http"
 require "json"
-require "twilio-ruby"
-# require "time"
+begin
+  require 'twilio-ruby'
+rescue LoadError
+  warn "Twilio gem not installed, skipping Twilio integration."
+end
 
 module RailsErrorNotifier
   class Notifier
