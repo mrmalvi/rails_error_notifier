@@ -1,13 +1,12 @@
 # 🚨 RailsErrorNotifier
 
-RailsErrorNotifier is a Ruby gem that automatically captures and notifies about errors in your Rails applications.
-It integrates with **Slack** and **Discord** out of the box, so you never miss a critical error in production.
-
+RailsErrorNotifier is a Ruby gem that automatically captures errors in your Rails applications and sends notifications to your preferred channels.
+It supports **Slack**, **Discord**, **Email**, and **WhatsApp**, ensuring you’re immediately informed about critical issues in production.
 ---
 
 ## ✨ Features
 - 🔥 Capture unhandled exceptions in Rails automatically via Rack middleware.
-- 📩 Send error notifications to **Slack** and **Discord**.
+- 📩 Send error notifications to Slack, Discord, Email, and WhatsApp.
 - ⚙️ Easy configuration through Rails initializers.
 - 📝 Add custom context (e.g., current user, request path).
 - 🛡️ Safe when disabled (no crashes if webhooks are missing).
