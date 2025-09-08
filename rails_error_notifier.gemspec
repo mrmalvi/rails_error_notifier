@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = ["malviyak00@gmail.com"]
 
   spec.summary = "Notify Rails errors to Slack and Discord, Email, WhatsApp"
-  spec.description = "A gem to send Rails exceptions to Slack and Discord"
+  spec.description = "A Rails gem that automatically captures application errors and sends instant notifications to Slack, Discord, Email, or WhatsApp (via Twilio)."
   spec.homepage = "https://github.com/mrmalvi/rails_error_notifier"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.0.0"
