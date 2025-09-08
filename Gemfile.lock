@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rails_error_notifier (0.1.8)
+    rails_error_notifier (0.1.9)
       twilio-ruby (>= 6.6, < 8.0)
 
 GEM

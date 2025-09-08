@@ -18,10 +18,11 @@ module RailsErrorNotifier
 
     def deliver
       return unless RailsErrorNotifier.configuration&.enabled
+      app_trace = (exception.backtrace || []).select { |line| line.include?("/app/") }
 
       payload = {
         error: exception.message,
-        backtrace: exception.backtrace || ["No backtrace"],
+        backtrace:  app_trace.presence || exception.backtrace || ["No backtrace"],
         context: context || {}
       }
 
