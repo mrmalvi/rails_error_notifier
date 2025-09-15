@@ -20,6 +20,9 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "twilio-ruby", ">= 6.6", "< 8.0"
 
+  spec.add_development_dependency "rspec", ">= 3.0"
+  spec.add_development_dependency 'rspec-rails'
+
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
   gemspec = File.basename(__FILE__)
