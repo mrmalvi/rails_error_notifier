@@ -4,7 +4,7 @@
 [![Build Status](https://github.com/mrmalvi/rails_error_notifier/actions/workflows/ci.yml/badge.svg)](https://github.com/mrmalvi/rails_error_notifier/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Rails Error Notifier** is an open-source **Ruby gem** for **Rails 7+ applications** that automatically captures unhandled exceptions and sends instant notifications.
+**Rails Error Notifier** is an open-source **Ruby gem** for **Rails 6+ applications** that automatically captures unhandled exceptions and sends instant notifications.
 It integrates with **Slack**, **Discord**, **Email**, and **WhatsApp (Twilio)** so your team is immediately alerted to production errors.
 
 👉 [RubyGems page](https://rubygems.org/gems/rails_error_notifier) |
