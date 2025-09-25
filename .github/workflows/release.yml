@@ -1,0 +1,55 @@
+name: Release to RubyGems
+
+# Manual trigger for deployment
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version of the gem to release (e.g., 0.1.0)'
+        required: true
+        default: '0.1.0'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: [2.5.0, 2.5.9, 2.7.8, 3.0.6, 3.2.0] # Test multiple Ruby versions >=2.5
+    steps:
+      # 1️⃣ Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ Set up Ruby for testing
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+
+      # 3️⃣ Install dependencies
+      - name: Install dependencies
+        run: bundle install
+
+      # 4️⃣ Run RSpec tests
+      - name: Run RSpec tests
+        run: bundle exec rspec
+
+      # 5️⃣ Update gem version (only for build step)
+      - name: Update gem version
+        if: matrix.ruby == '3.2.0' # Only update/build/push using latest Ruby
+        run: |
+          sed -i "s/^  s.version.*/  s.version = '${{ github.event.inputs.version }}'/" rails_error_notifier.gemspec
+          cat rails_error_notifier.gemspec | grep s.version
+
+      # 6️⃣ Build gem
+      - name: Build gem
+        if: matrix.ruby == '3.2.0'
+        run: gem build rails_error_notifier.gemspec
+
+      # 7️⃣ Push gem to RubyGems
+      - name: Push gem to RubyGems
+        if: matrix.ruby == '3.2.0'
+        env:
+          RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+        run: gem push rails_error_notifier-*.gem
