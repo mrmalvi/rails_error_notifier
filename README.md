@@ -22,7 +22,7 @@ It integrates with **Slack**, **Discord**, **Email**, and **WhatsApp (Twilio)** 
 - ⚙️ Easy setup with Rails generator.
 - 📝 Add custom context (current user, request path, environment).
 - 🛡️ Safe failover (won’t crash if webhooks or configs are missing).
-- 🧩 Works seamlessly with **Rails 6, Rails 7, Ruby 2.0+**.
+- 🧩 Works seamlessly with **Rails 6, Rails 7, and above**, and supports **Ruby 2.0+**.
 
 ---
 
