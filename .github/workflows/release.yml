@@ -1,11 +1,11 @@
 name: Release to RubyGems
 
-# Manual trigger for deployment
+# Manual trigger
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version of the gem to release (e.g., 0.1.0)'
+        description: 'Version of the gem to release (e.g., 0.2.0)'
         required: true
         default: '0.2.0'
 
@@ -14,44 +14,48 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: [2.5.9, 2.6.10, 2.7.8, 3.0.6, 3.2.0]
+        ruby: [2.5.9, 2.6.10, 2.7.8, 3.0.6, 3.2.0] # Ruby versions to test
     steps:
-      # 1️⃣ Checkout the repository
+      # 1️⃣ Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣ Set up Ruby for testing
+      # 2️⃣ Set up Ruby
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler-cache: true
 
-      - name: Install Bundler for Ruby 2.5
-        if: matrix.ruby == '2.5.9'
-        run: gem install bundler -v 2.2.33
+      # 3️⃣ Install Bundler compatible with Ruby version
+      - name: Install Bundler
+        run: |
+          if [[ "${{ matrix.ruby }}" == 2.5.* ]]; then
+            gem install bundler -v 2.2.33
+          else
+            gem install bundler -v 2.7.1
+          fi
 
-      # 3️⃣ Install dependencies
+      # 4️⃣ Install dependencies
       - name: Install dependencies
         run: bundle install
 
-      # 4️⃣ Run RSpec tests
+      # 5️⃣ Run RSpec tests
       - name: Run RSpec tests
         run: bundle exec rspec
 
-      # 5️⃣ Update gem version (only for build step)
+      # 6️⃣ Update gem version (only Ruby 3.2.0)
       - name: Update gem version
-        if: matrix.ruby == '3.2.0' # Only update/build/push using latest Ruby
+        if: matrix.ruby == '3.2.0'
         run: |
           sed -i "s/^  s.version.*/  s.version = '${{ github.event.inputs.version }}'/" rails_error_notifier.gemspec
           cat rails_error_notifier.gemspec | grep s.version
 
-      # 6️⃣ Build gem
+      # 7️⃣ Build gem (only Ruby 3.2.0)
       - name: Build gem
         if: matrix.ruby == '3.2.0'
         run: gem build rails_error_notifier.gemspec
 
-      # 7️⃣ Push gem to RubyGems
+      # 8️⃣ Push gem to RubyGems (only Ruby 3.2.0)
       - name: Push gem to RubyGems
         if: matrix.ruby == '3.2.0'
         env:
