@@ -155,7 +155,7 @@ See [issues](https://github.com/mrmalvi/rails_error_notifier/issues).
 
 ## 📜 License
 
-Released under the [MIT License](LICENSE).
+Released under the [MIT License](LICENSE.txt).
 
 ---
 
