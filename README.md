@@ -31,7 +31,7 @@ It integrates with **Slack**, **Discord**, **Email**, and **WhatsApp (Twilio)** 
 Add this line to your `Gemfile`:
 
 ```ruby
-gem 'rails_error_notifier', git: 'https://github.com/mrmalvi/rails_error_notifier.git'
+gem 'rails_error_notifier'
 ```
 
 Install the gem:
