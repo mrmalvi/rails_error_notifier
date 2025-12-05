@@ -69,10 +69,16 @@ module RailsErrorNotifier
         }
       end
 
-      Net::HTTP.post(uri, data.to_json, "Content-Type" => "application/json")
-    rescue => e
-      warn "[RailsErrorNotifier] Slack/Discord delivery failed: #{e.message}"
-      nil
+      begin
+        Net::HTTP.post(uri, data.to_json, "Content-Type" => "application/json")
+      rescue
+        begin
+          Faraday.post(uri.to_s, data.to_json, "Content-Type" => "application/json")
+        rescue => e
+          warn "[RailsErrorNotifier] Slack/Discord delivery failed: #{e.message}"
+          nil
+        end
+      end
     end
 
     def send_to_email(payload)
