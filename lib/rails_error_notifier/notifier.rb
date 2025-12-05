@@ -1,5 +1,7 @@
 require "net/http"
 require "json"
+require "faraday"
+
 begin
   require 'twilio-ruby'
 rescue LoadError
