@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.metadata["source_code_uri"] = "https://github.com/mrmalvi/rails_error_notifier"
 
   spec.add_runtime_dependency "twilio-ruby", ">= 6.6", "< 8.0"
-  spec.add_runtime_dependency "faraday", "~> 2.7"
+  spec.add_runtime_dependency "faraday", ">= 0"
 
   spec.add_development_dependency "rspec", ">= 3.0"
   spec.add_development_dependency 'rspec-rails'
